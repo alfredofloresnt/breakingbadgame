@@ -19,7 +19,7 @@ public class MouseManager  implements MouseListener, MouseMotionListener {
     private boolean drag;              // to check if mouse is being dragged
     private int x;                      // to get x position of the mouse
     private int y;                      // to get y position of the mouse
-    
+    private int h;
     public MouseManager() {
         izquierdo = false;
         derecho = false;
@@ -61,14 +61,8 @@ public class MouseManager  implements MouseListener, MouseMotionListener {
         }
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-        if (e.getButton() == MouseEvent.BUTTON1){
-            izquierdo = false;
-            
-        }
-    }
+    
+    
     
     @Override
     public void mouseEntered(MouseEvent e) {
