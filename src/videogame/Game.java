@@ -21,13 +21,8 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game
     private boolean running;        // to set the game
     private Player player;          // to use a player
-    private Asteroid sun;
     private KeyManager keyManager;  // to manage the keyboard
-    private MouseManager mouseManager;
-    private LinkedList<Lives> lives; // Player Lives
-    private int livesCount;
-    private boolean gameOver;
-    int randomNum;
+    
     
     
     /**
@@ -41,12 +36,10 @@ public class Game implements Runnable {
         this.title = title;
         this.width = width;
         this.height = height;
-        this.livesCount = livesCount;
+       
         running = false;
         keyManager = new KeyManager();
-        mouseManager = new MouseManager();
-        lives = new LinkedList<Lives>();
-        this.gameOver = false;
+        
     }
 
     /**
@@ -65,9 +58,7 @@ public class Game implements Runnable {
         return height;
     }
     
-    public int getRandomNumber(int min, int max){
-        return randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
-    }
+   
     
     
     /**
@@ -76,16 +67,10 @@ public class Game implements Runnable {
     private void init() {
          display = new Display(title, getWidth(), getHeight());  
          Assets.init();
-         player = new Player(getRandomNumber(0, getWidth()), getRandomNumber(0, getHeight())-100, 1, 100, 100,  this);
-         sun = new Asteroid(getRandomNumber(0, getWidth()), getRandomNumber(0, getHeight()), 100, 100, player, this);
-         for (int i = 0; i < livesCount; i++){
-             lives.add(new Lives(50*i,0,50,50,this));
-         }
+         player = new Player(50, 50, 1, 100, 100,  this);
+         
          display.getJframe().addKeyListener(keyManager);
-         display.getJframe().addMouseListener(mouseManager);
-         display.getJframe().addMouseMotionListener(mouseManager);
-         display.getCanvas().addMouseListener(mouseManager);
-         display.getCanvas().addMouseMotionListener(mouseManager);
+         
     }
     
     @Override
@@ -123,33 +108,14 @@ public class Game implements Runnable {
         return keyManager;
     }
     
-    public MouseManager getMouseManager() {
-        return mouseManager;
-    }    
+      
     
     private void tick() {
-        if (lives.size()>0){
+        
         keyManager.tick();
         // avancing player with colision
         player.tick();
-        sun.tick();
-        for (int i = 0; i < lives.size(); i++){
-            Lives live = lives.get(i);
-            live.tick();
-        }
-        if (player.intersecta(sun)){
-            Assets.punch.play();
-            lives.removeLast();
-            player.setX(getRandomNumber(0,width));
-            player.setY(getRandomNumber(0,height));
-            sun.setX(getRandomNumber(0,width-100));
-            sun.setY(getRandomNumber(0,height+100));
-            sun.incrementSpeed(1);
-        }
-        }
-        else{
-            gameOver = true;
-        }
+        
     }
     
     private void render() {
@@ -169,14 +135,8 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
-            sun.render(g);
-            for (int i = 0; i < lives.size(); i++){
-                Lives live = lives.get(i);
-                live.render(g);
-            }
-            if (gameOver){
-                g.drawImage(Assets.gameOver, width/2-150, height/2-100, 300, 200, null);
-            }
+          
+            
             bs.show();
             g.dispose();
         }
