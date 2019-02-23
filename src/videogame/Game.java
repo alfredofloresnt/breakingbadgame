@@ -21,9 +21,8 @@ public class Game implements Runnable {
     private Thread thread;          // thread to create the game
     private boolean running;        // to set the game
     private Player player;          // to use a player
+    private Ball ball;
     private KeyManager keyManager;  // to manage the keyboard
-    
-    
     
     /**
      * to create title, width and height and set the game is still not running
@@ -36,7 +35,6 @@ public class Game implements Runnable {
         this.title = title;
         this.width = width;
         this.height = height;
-       
         running = false;
         keyManager = new KeyManager();
         
@@ -67,8 +65,8 @@ public class Game implements Runnable {
     private void init() {
          display = new Display(title, getWidth(), getHeight());  
          Assets.init();
-         player = new Player(50, 50, 1, 100, 100,  this);
-         
+         player = new Player(50, 50, 1, 100, 15,  this);
+         ball = new Ball(100,100,64,32,this);
          display.getJframe().addKeyListener(keyManager);
          
     }
@@ -115,6 +113,7 @@ public class Game implements Runnable {
         keyManager.tick();
         // avancing player with colision
         player.tick();
+        ball.tick();
         
     }
     
@@ -135,8 +134,7 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
-          
-            
+            ball.render(g);
             bs.show();
             g.dispose();
         }

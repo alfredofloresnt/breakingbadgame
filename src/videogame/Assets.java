@@ -11,10 +11,7 @@ import java.awt.image.BufferedImage;
 public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
-    public static BufferedImage sun; 
-    public static BufferedImage playerCollide; 
-    public static BufferedImage live;
-    public static BufferedImage gameOver;
+    public static BufferedImage ball;
     public static SoundClip punch;
 
     /**
@@ -22,11 +19,8 @@ public class Assets {
      */
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
-        sun = ImageLoader.loadImage("/images/sun.png");
         player = ImageLoader.loadImage("/images/planet.png");
-        playerCollide = ImageLoader.loadImage("/images/playerCollide.png");
-        live = ImageLoader.loadImage("/images/live.png");
-        gameOver = ImageLoader.loadImage("/images/gameover.png");
+        ball = ImageLoader.loadImage("/images/ball.png");
         punch = new SoundClip("/sounds/punch.wav");
     }
     

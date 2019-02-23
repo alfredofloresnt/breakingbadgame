@@ -5,6 +5,7 @@
  */
 package videogame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -16,6 +17,7 @@ public class Player extends Item{
     private int width;
     private int height;
     private Game game;
+    private int speed;
     /**
      * 
      * @param x player pos at x
@@ -27,11 +29,10 @@ public class Player extends Item{
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y);
-
         this.width = width;
         this.height = height;
         this.game = game;
-
+        this.speed = 1;
     }
 
     
@@ -56,6 +57,18 @@ public class Player extends Item{
 
     @Override
     public void tick() {
+        if (game.getKeyManager().left){
+            setX(getX()-speed);
+        }
+        if (game.getKeyManager().right){
+            setX(getX()+speed);
+        }
+        if (getX()<0){
+            setX(0);
+        }
+        else if (getX()>game.getWidth()-100){
+            setX(game.getWidth()-100);
+        }
        
 
         
@@ -67,6 +80,8 @@ public class Player extends Item{
     
     @Override
     public void render(Graphics g) {
-            g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);     
+            g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
+            g.setColor(Color.blue);
+            g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 }
