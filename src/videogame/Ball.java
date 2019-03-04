@@ -6,6 +6,7 @@
 package videogame;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -18,14 +19,17 @@ public class Ball extends Item {
     private int xSpeed;
     private int ySpeed;
     private Game game;
+    private Player player;
+    
 
-    public Ball(int x, int y, int width, int height, Game game) {
+    public Ball(int x, int y, int width, int height,Player player, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;
         this.xSpeed = 1;
         this.ySpeed = 1;
+        this.player = player;
     }
 
     public int getWidth() {
@@ -42,6 +46,14 @@ public class Ball extends Item {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+    
+    public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+    
+    public boolean intersecta(Object obj) {
+        return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
     }
 
     @Override
@@ -61,6 +73,9 @@ public class Ball extends Item {
             ySpeed *= -1;
         } else if (getY() > game.getHeight() - getHeight()) {
             ySpeed *= -1;
+        }
+        if(intersecta(player)){
+            ySpeed*=-1;
         }
 
     }

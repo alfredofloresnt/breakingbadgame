@@ -19,7 +19,6 @@ public class Assets {
      */
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
-        player = ImageLoader.loadImage("/images/planet.png");
         ball = ImageLoader.loadImage("/images/ball.png");
         punch = new SoundClip("/sounds/punch.wav");
     }

@@ -32,7 +32,7 @@ public class Player extends Item{
         this.width = width;
         this.height = height;
         this.game = game;
-        this.speed = 1;
+        this.speed = 3;
     }
 
     
@@ -54,6 +54,11 @@ public class Player extends Item{
     public void setHeight(int height) {
         this.height = height;
     }
+    
+    public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+    
 
     @Override
     public void tick() {
@@ -69,9 +74,6 @@ public class Player extends Item{
         else if (getX()>game.getWidth()-100){
             setX(game.getWidth()-100);
         }
-       
-
-        
         
     }
     
@@ -80,7 +82,6 @@ public class Player extends Item{
     
     @Override
     public void render(Graphics g) {
-            g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
             g.setColor(Color.blue);
             g.fillRect(getX(), getY(), getWidth(), getHeight());
     }

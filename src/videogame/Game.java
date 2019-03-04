@@ -65,8 +65,8 @@ public class Game implements Runnable {
     private void init() {
          display = new Display(title, getWidth(), getHeight());  
          Assets.init();
-         player = new Player(50, 50, 1, 100, 15,  this);
-         ball = new Ball(100,100,64,32,this);
+         player = new Player(getWidth()/2, getHeight()-30, 1, 100, 15,  this);
+         ball = new Ball(100,100,64,32,player,this);
          display.getJframe().addKeyListener(keyManager);
          
     }
