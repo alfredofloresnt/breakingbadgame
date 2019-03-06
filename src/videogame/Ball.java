@@ -39,6 +39,14 @@ public class Ball extends Item {
     public int getHeight() {
         return height;
     }
+    
+    public void setXspeed() {
+        xSpeed *= -1;
+    }
+    
+    public void setYspeed() {
+        ySpeed *= -1;
+    }
 
     public void setWidth(int width) {
         this.width = width;
@@ -52,7 +60,10 @@ public class Ball extends Item {
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
     
-    public boolean intersecta(Object obj) {
+    public boolean intersectaPlayer(Object obj) {
+        return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
+    }
+    public boolean intersectaBall(Object obj) {
         return obj instanceof Player && getPerimetro().intersects(((Player) obj).getPerimetro());
     }
 
@@ -74,9 +85,11 @@ public class Ball extends Item {
         } else if (getY() > game.getHeight() - getHeight()) {
             ySpeed *= -1;
         }
-        if(intersecta(player)){
+        if(intersectaPlayer(player)){
             ySpeed*=-1;
+            
         }
+        
 
     }
 

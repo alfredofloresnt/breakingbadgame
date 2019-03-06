@@ -8,8 +8,19 @@ package videogame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Game implements Runnable {
     private BufferStrategy bs;      // to have several buffers when displaying
@@ -23,6 +34,12 @@ public class Game implements Runnable {
     private Player player;          // to use a player
     private Ball ball;
     private KeyManager keyManager;  // to manage the keyboard
+    private ArrayList<Brick> bricks;
+    private int cols = 4;
+    private int rows = 16;
+    private String[] arr;
+    private Vector vec;
+    
     
     /**
      * to create title, width and height and set the game is still not running
@@ -37,8 +54,45 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        
+        bricks = new ArrayList<Brick>();
     }
+    
+    
+    
+    public void leerArchivo() throws IOException {
+                                                          
+                BufferedReader fileIn;
+                try {
+                        fileIn = new BufferedReader(new FileReader("C://Users//AlfredoFlores//Documents//breakingbadgame//src//videogame//prueba.txt"));
+                } catch (FileNotFoundException e){
+                        File puntos = new File("C://Users//AlfredoFlores//Documents//breakingbadgame//src//videogame//prueba.txt");
+                        PrintWriter fileOut = new PrintWriter(puntos);
+                        fileOut.println("100,demo");
+                        fileOut.close();
+                        fileIn = new BufferedReader(new FileReader("C://Users//AlfredoFlores//Documents//breakingbadgame//src//videogame//prueba.txt"));
+                }
+                String dato = fileIn.readLine();
+                while(dato != null) {  
+                                                        
+                      arr = dato.split(",");
+                      int num = (Integer.parseInt(arr[0]));
+                      String nom = arr[1];
+                      vec.add(new Puntaje(0,0,num, nom, this));
+                      dato = fileIn.readLine();
+                }
+                fileIn.close();
+        }
+    public void grabaArchivo() throws IOException {
+                                                          
+                PrintWriter fileOut = new PrintWriter(new FileWriter("C://Users//AlfredoFlores//Documents//breakingbadgame//src//videogame//prueba.txt"));
+                for (int i = 0; i < vec.size(); i++) {
+
+                    Puntaje x;
+                    x = (Puntaje) vec.get(i);
+                    fileOut.println(x.toString());
+                }
+                fileOut.close();
+        }
 
     /**
      * To get the width of the game window
@@ -63,12 +117,24 @@ public class Game implements Runnable {
      * initializing the display window of the game
      */
     private void init() {
+        vec = new Vector();
          display = new Display(title, getWidth(), getHeight());  
          Assets.init();
          player = new Player(getWidth()/2, getHeight()-30, 1, 100, 15,  this);
-         ball = new Ball(100,100,64,32,player,this);
+         ball = new Ball(300,300,64,32,player,this);
          display.getJframe().addKeyListener(keyManager);
+         int cont = 0;
+         for(int i = 0 ; i < rows; i++){
+             for (int j = 0 ; j < cols; j++){
+                 cont++;
+                 bricks.add(new Brick(5+i*60, 5+j*60, 100, 100, cont, ball, this));
+             }
+         }
          
+    }
+    
+    void eliminar(int id){
+        bricks.remove(0);
     }
     
     @Override
@@ -84,6 +150,11 @@ public class Game implements Runnable {
         long now;
         // initializing last time to the computer time in nanosecs
         long lastTime = System.nanoTime();
+        try{
+            leerArchivo();
+        } catch (IOException ex) {
+             System.out.println("Error en " + ex.toString());
+        }
         while (running) {
             // setting the time now to the actual time
             now = System.nanoTime();
@@ -109,11 +180,14 @@ public class Game implements Runnable {
       
     
     private void tick() {
-        
+        //leerArchivo();
         keyManager.tick();
         // avancing player with colision
         player.tick();
         ball.tick();
+        for(int i = 0; i < bricks.size(); i++){
+            bricks.get(i).tick();
+        }
         
     }
     
@@ -126,6 +200,7 @@ public class Game implements Runnable {
         buffer strategy element. 
         show the graphic and dispose it to the trash system
         */
+        
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         }
@@ -135,8 +210,12 @@ public class Game implements Runnable {
             g.drawImage(Assets.background, 0, 0, width, height, null);
             player.render(g);
             ball.render(g);
+            for(int i = 0; i < bricks.size(); i++){
+            bricks.get(i).render(g);
+        }
             bs.show();
             g.dispose();
+            
         }
        
     }

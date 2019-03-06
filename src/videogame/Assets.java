@@ -12,6 +12,7 @@ public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
     public static BufferedImage ball;
+    public static BufferedImage brick;
     public static SoundClip punch;
 
     /**
@@ -20,6 +21,7 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/Background.jpg");
         ball = ImageLoader.loadImage("/images/ball.png");
+        brick = ImageLoader.loadImage("/images/brick.png");
         punch = new SoundClip("/sounds/punch.wav");
     }
     
